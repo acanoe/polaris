@@ -8,58 +8,33 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    sources: [
-      'https://codecourse.com/api/rss/courses',
-      'https://buttondown.email/alpinejs/rss'
-    ],
+    loading: false,
     error: null,
     feeds: {},
-    cards: [
-      {
-        title: "Pre-fab homes",
-        src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
-        flex: 12,
-      },
-      {
-        title: "Favorite road trips",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        flex: 6,
-      },
-      {
-        title: "Best airlines",
-        src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-        flex: 6,
-      },
-      {
-        title: "Pre-fab homes",
-        src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
-        flex: 6,
-      },
-      {
-        title: "Favorite road trips",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        flex: 6,
-      },
-      {
-        title: "Best airlines",
-        src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-        flex: 6,
-      },
+    sources: [
+      'https://buttondown.email/alpinejs/rss',
+
     ],
   },
   mutations: {
-    setData(state, data) {
+    setFeedsData(state, data) {
       state.cards = data
     },
-    addError(state, error) {
-      state.error = error
-    },
-    addToFeed(state, item) {
+    processFeed(state, item) {
       state.feeds = Object.assign({}, state.feeds, { [item.url]: item.items })
     },
+    showError(state, error) {
+      state.loading = false
+      state.error = error
+    },
+    toggleLoading(state) {
+      state.loading = !state.loading
+    }
   },
   actions: {
     get({ commit }, source) {
+      commit('toggleLoading')
+
       let feedItem = {
         url: source,
         items: []
@@ -80,6 +55,7 @@ export default new Vuex.Store({
         })
 
         commit('addToFeed', feedItem)
+        commit('toggleLoading')
       })
     },
     init({ dispatch }) {

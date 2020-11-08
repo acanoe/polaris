@@ -5,8 +5,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn @click="$store.dispatch('init')" icon>
-        <v-icon>mdi-refresh</v-icon>
+      <v-btn @click="$store.dispatch('init')" icon loading="$store.loading">
+        <v-icon>mdi-refresh</v-icon>{{ $store.loading }}
       </v-btn>
 
       <v-btn icon>
@@ -95,12 +95,7 @@
 export default {
   data: () => ({
     drawer: true,
-    options: {},
-    items: [
-      { title: "Home", icon: "mdi-home-city" },
-      { title: "My Account", icon: "mdi-account" },
-      { title: "Users", icon: "mdi-account-group-outline" },
-    ],
+    selectedFeed: null,
   }),
   computed: {
     sources() {
